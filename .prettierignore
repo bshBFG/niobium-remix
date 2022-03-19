@@ -1,0 +1,13 @@
+node_modules
+
+/.cache
+/build
+/public/build
+.env
+
+/app/styles/tailwind.css
+
+/postgres-data
+
+/package-lock.json
+/yarn.lock
