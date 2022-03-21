@@ -1,4 +1,4 @@
-import type { LinksFunction } from "remix";
+import { json, LinksFunction, LoaderFunction } from "remix";
 import {
   Links,
   LiveReload,
@@ -10,6 +10,7 @@ import {
 import type { MetaFunction } from "remix";
 
 import styles from "./styles/tailwind.css";
+import { getUser } from "./utils/session.server";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
@@ -18,6 +19,16 @@ export const meta: MetaFunction = () => ({
   title: "Niobium Remix App",
   viewport: "width=device-width,initial-scale=1",
 });
+
+type LoaderData = {
+  user: Awaited<ReturnType<typeof getUser>>;
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  return json<LoaderData>({
+    user: await getUser(request),
+  });
+};
 
 export default function App() {
   return (

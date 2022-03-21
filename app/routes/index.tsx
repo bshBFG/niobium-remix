@@ -1,8 +1,11 @@
-import { Link } from "remix";
+import { Form, Link } from "remix";
 
+import { useOptionalUser } from "~/utils/utils";
 import background from "../../public/dance.png";
 
 export default function Index() {
+  const user = useOptionalUser();
+
   return (
     <div className="relative flex h-screen w-screen flex-col text-gray-800">
       <div className="absolute top-0 left-0 -z-50 grid h-screen w-screen place-content-center overflow-hidden bg-slate-50">
@@ -44,7 +47,26 @@ export default function Index() {
           </div>
         </div>
 
-        {true ? (
+        {user ? (
+          <div className="flex items-center justify-center space-x-8">
+            <Link
+              to="/dashboard"
+              className="flex flex-col items-center justify-center"
+            >
+              <div className="font-bold text-black">John Doe</div>
+              <div className="text-xs">{user.email}</div>
+            </Link>
+
+            <Form action="/logout" method="post">
+              <button
+                type="submit"
+                className="rounded-md bg-black px-4 py-2 text-white hover:bg-gray-900"
+              >
+                Log Out
+              </button>
+            </Form>
+          </div>
+        ) : (
           <div className="space-x-2">
             <Link
               to="/signup"
@@ -53,27 +75,10 @@ export default function Index() {
               Sign Up
             </Link>
             <Link
-              to="/signin"
+              to="/login"
               className="rounded-md bg-black px-4 py-2 text-white hover:bg-gray-900"
             >
-              Sign In
-            </Link>
-          </div>
-        ) : (
-          <div className="flex items-center justify-center space-x-8">
-            <Link
-              to="/dashboard"
-              className="flex flex-col items-center justify-center"
-            >
-              <div className="font-bold text-black">John Doe</div>
-              <div className="text-xs">john@doe.com</div>
-            </Link>
-
-            <Link
-              to="/signout"
-              className="rounded-md bg-black px-4 py-2 text-white hover:bg-gray-900"
-            >
-              SignOut
+              Log In
             </Link>
           </div>
         )}

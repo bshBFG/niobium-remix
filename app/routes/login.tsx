@@ -3,8 +3,8 @@ import type { ActionFunction, LoaderFunction, MetaFunction } from "remix";
 import { json, redirect, useActionData, useSearchParams } from "remix";
 import { Form, Link } from "remix";
 
-import { getUserId, createUserSession } from "~/utils/session.server";
-import { createUser, getUserByEmail } from "~/models/user.server";
+import { createUserSession, getUserId } from "~/utils/session.server";
+import { verifyLogin } from "~/models/user.server";
 import { validateEmail } from "~/utils/utils";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -25,6 +25,7 @@ export const action: ActionFunction = async ({ request }) => {
   const email = formData.get("email");
   const password = formData.get("password");
   const redirectTo = formData.get("redirectTo");
+  const remember = formData.get("remember");
 
   if (!validateEmail(email)) {
     return json<ActionData>(
@@ -47,34 +48,33 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  const existingUser = await getUserByEmail(email);
-  if (existingUser) {
+  const user = await verifyLogin(email, password);
+
+  if (!user) {
     return json<ActionData>(
-      { errors: { email: "A user already exists with this email" } },
+      { errors: { email: "Invalid email or password" } },
       { status: 400 }
     );
   }
 
-  const user = await createUser(email, password);
-
   return createUserSession({
     request,
     userId: user.id,
-    remember: false,
+    remember: remember === "on" ? true : false,
     redirectTo: typeof redirectTo === "string" ? redirectTo : "/",
   });
 };
 
 export const meta: MetaFunction = () => {
   return {
-    title: "Sign Up",
+    title: "Sign in",
   };
 };
 
-export default function SignUpPage() {
+export default function LoginPage() {
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") ?? undefined;
-  const actionData = useActionData() as ActionData;
+  const redirectTo = searchParams.get("redirectTo") || "/";
+  const actionData = useActionData<ActionData>();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -103,9 +103,9 @@ export default function SignUpPage() {
         </Link>
       </div>
 
-      <div className="min-h-80 flex flex-col space-y-6 rounded-md border p-8 shadow-lg">
+      <div className="min-h-80 flex w-auto flex-col space-y-6 rounded-md border p-8 shadow-lg">
         <div className="flex w-full items-center justify-center">
-          <h1 className="text-2xl">Sign up</h1>
+          <h1 className="text-2xl">Login</h1>
         </div>
 
         <Form method="post" noValidate className="space-y-6">
@@ -149,7 +149,6 @@ export default function SignUpPage() {
                 ref={passwordRef}
                 id="password"
                 required
-                autoFocus={true}
                 name="password"
                 type="password"
                 autoComplete="password"
@@ -171,20 +170,35 @@ export default function SignUpPage() {
             type="submit"
             className="w-full rounded bg-black  py-2 px-4 text-white hover:bg-gray-900 focus:bg-gray-800"
           >
-            Create Account
+            Log In
           </button>
 
           <div className="flex items-center justify-center">
+            <input
+              id="remember"
+              name="remember"
+              type="checkbox"
+              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            <label
+              htmlFor="remember"
+              className="ml-2 block text-sm text-gray-900"
+            >
+              Remember me
+            </label>
+          </div>
+
+          <div className="flex items-center justify-center">
             <div className="text-center text-sm text-gray-500">
-              Already have an account?{" "}
+              Don't have an account?{" "}
               <Link
                 className="text-blue-500 underline"
                 to={{
-                  pathname: "/login",
+                  pathname: "/signup",
                   search: searchParams.toString(),
                 }}
               >
-                Log in
+                Sign up
               </Link>
             </div>
           </div>
