@@ -46,3 +46,7 @@ export default function App() {
     </html>
   );
 }
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  return <h1>ERROR</h1>;
+}

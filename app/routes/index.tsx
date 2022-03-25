@@ -1,7 +1,8 @@
 import { Form, Link } from "remix";
 
 import { useOptionalUser } from "~/utils/utils";
-import background from "../../public/dance.png";
+import background from "~/images/index-bg.png";
+import { Image } from "~/components/image";
 
 export default function Index() {
   const user = useOptionalUser();
@@ -9,9 +10,26 @@ export default function Index() {
   return (
     <div className="relative flex h-screen w-screen flex-col text-gray-800">
       <div className="absolute top-0 left-0 -z-50 grid h-screen w-screen place-content-center overflow-hidden bg-slate-50">
-        <img
+        <Image
           src={background}
-          alt="dance"
+          alt="dance background"
+          position="top"
+          width={1920}
+          height={850}
+          responsive={[
+            {
+              size: {
+                width: 844,
+                height: 844,
+              },
+            },
+            {
+              size: {
+                width: 1920,
+                height: 850,
+              },
+            },
+          ]}
           className="h-screen translate-y-20 object-cover"
         />
       </div>
