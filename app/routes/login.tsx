@@ -1,7 +1,13 @@
 import { useEffect, useRef } from "react";
 import type { ActionFunction, LoaderFunction, MetaFunction } from "remix";
-import { json, redirect, useActionData, useSearchParams } from "remix";
-import { Form, Link } from "remix";
+import {
+  Form,
+  json,
+  Link,
+  redirect,
+  useActionData,
+  useSearchParams,
+} from "remix";
 
 import { createUserSession, getUserId } from "~/utils/session.server";
 import { verifyLogin } from "~/models/user.server";
@@ -41,7 +47,7 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  if (password.length < 6) {
+  if (password.length < 4) {
     return json<ActionData>(
       { errors: { password: "Password is too short" } },
       { status: 400 }

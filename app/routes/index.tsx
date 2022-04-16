@@ -1,6 +1,6 @@
 import { Form, Link } from "remix";
 
-import { useOptionalUser } from "~/utils/utils";
+import { getFullNameOrNull, useOptionalUser } from "~/utils/utils";
 import background from "~/images/index-bg.png";
 import { Image } from "~/components/image";
 
@@ -56,12 +56,14 @@ export default function Index() {
             >
               Home
             </Link>
-            <Link
-              className="hover:text-black hover:underline hover:decoration-black"
-              to="/dashboard"
-            >
-              Dashboard
-            </Link>
+            {user?.role === "ADMIN" ? (
+              <Link
+                className="hover:text-black hover:underline hover:decoration-black"
+                to="/dashboard"
+              >
+                Dashboard
+              </Link>
+            ) : null}
           </div>
         </div>
 
@@ -71,7 +73,9 @@ export default function Index() {
               to="/dashboard"
               className="flex flex-col items-center justify-center"
             >
-              <div className="font-bold text-black">John Doe</div>
+              <div className="font-bold text-black">
+                {getFullNameOrNull(user.profile) || "unknown"}
+              </div>
               <div className="text-xs">{user.email}</div>
             </Link>
 

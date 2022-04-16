@@ -1,8 +1,8 @@
 import { createCookieSessionStorage, redirect } from "remix";
 import invariant from "tiny-invariant";
 
-import type { User } from "~/models/user.server";
-import { getUserById } from "~/models/user.server";
+import { getUserWithProfileById, Profile, User } from "~/models/user.server";
+import { Role } from "~/models/user.server";
 
 invariant(process.env.SESSION_SECRET, "SESSION_SECRET must be set");
 
@@ -33,11 +33,13 @@ export async function getUserId(request: Request): Promise<string | undefined> {
   return userId;
 }
 
-export async function getUser(request: Request): Promise<User | null> {
+export async function getUser(
+  request: Request
+): Promise<(User & { profile: Profile | null }) | null> {
   const userId = await getUserId(request);
   if (userId === undefined) return null;
 
-  const user = await getUserById(userId);
+  const user = await getUserWithProfileById(userId);
   if (user) return user;
 
   throw await logout(request);
@@ -51,7 +53,7 @@ export async function requireUserId(
 
   if (!userId) {
     const serchParams = new URLSearchParams([["redirectTo", redirectTo]]);
-    throw redirect(`/signin?${serchParams}`);
+    throw redirect(`/login?${serchParams}`);
   }
 
   return userId;
@@ -60,10 +62,20 @@ export async function requireUserId(
 export async function requireUser(request: Request) {
   const userId = await requireUserId(request);
 
-  const user = await getUserById(userId);
+  const user = await getUserWithProfileById(userId);
   if (user) return user;
 
   throw await logout(request);
+}
+
+export async function requireUserRole(request: Request, roles: Role[]) {
+  const user = await requireUser(request);
+
+  if (roles.includes(user.role)) {
+    return user;
+  }
+
+  throw redirect("/");
 }
 
 export async function createUserSession({

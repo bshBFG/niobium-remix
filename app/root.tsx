@@ -1,5 +1,6 @@
-import { json, LinksFunction, LoaderFunction } from "remix";
+import type { LinksFunction, LoaderFunction, MetaFunction } from "remix";
 import {
+  json,
   Links,
   LiveReload,
   Meta,
@@ -7,12 +8,13 @@ import {
   Scripts,
   ScrollRestoration,
 } from "remix";
-import type { MetaFunction } from "remix";
 
-import styles from "./styles/tailwind.css";
+import tailwind from "./styles/tailwind.css";
 import { getUser } from "./utils/session.server";
 
-export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: tailwind },
+];
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
