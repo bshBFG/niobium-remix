@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useMatches } from "remix";
+import { useMatches } from "@remix-run/react";
 
 import type { Profile, User } from "~/models/user.server";
 

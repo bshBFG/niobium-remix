@@ -1,13 +1,17 @@
-import type { LinksFunction, LoaderFunction, MetaFunction } from "remix";
+import type {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
+import { json } from "@remix-run/node";
 import {
-  json,
   Links,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "remix";
+} from "@remix-run/react";
 
 import tailwind from "./styles/tailwind.css";
 import { getUser } from "./utils/session.server";

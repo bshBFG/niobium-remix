@@ -1,4 +1,4 @@
-import { Form, Link } from "remix";
+import { Form, Link } from "@remix-run/react";
 import {
   BellIcon,
   CogIcon,
@@ -8,10 +8,10 @@ import {
 } from "@heroicons/react/outline";
 import { Popover } from "@headlessui/react";
 
-import { Image } from "../image";
 import defaultAvatar from "~/components/dashboard/images/default-avatar.jpg";
 import { getFullNameOrNull, useOptionalUser } from "~/utils/utils";
 import { useDispatchSidebar } from "./sidebar-context";
+import { Image } from "~/modules/image";
 
 export const Header = () => {
   const user = useOptionalUser();

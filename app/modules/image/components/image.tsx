@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef } from "react";
 import type { FitEnum } from "sharp";
 
-const DEFAULT_RESIZER_URL = "/assets/image";
+const DEFAULT_RESIZE_URL = "/assets/image";
 
 export type ResponsiveImage = {
   maxWidth?: number;
@@ -20,7 +20,7 @@ export type ImageProps = ComponentPropsWithoutRef<"img"> & {
 };
 
 export const Image = ({
-  optimizerUrl = DEFAULT_RESIZER_URL,
+  optimizerUrl = DEFAULT_RESIZE_URL,
   width,
   height,
   responsive,

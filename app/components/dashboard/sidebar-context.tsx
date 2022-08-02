@@ -1,10 +1,5 @@
-import {
-  createContext,
-  Dispatch,
-  useContext,
-  useEffect,
-  useReducer,
-} from "react";
+import type { Dispatch } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
 import { Breakpoints, useWindowSize } from "~/hooks/useWindowSize";
 

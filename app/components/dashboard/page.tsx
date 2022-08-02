@@ -1,6 +1,6 @@
 import { ReplyIcon } from "@heroicons/react/outline";
-import { ReactNode } from "react";
-import { Link } from "remix";
+import type { ReactNode } from "react";
+import { Link } from "@remix-run/react";
 
 type PageProps = {
   children: ReactNode;

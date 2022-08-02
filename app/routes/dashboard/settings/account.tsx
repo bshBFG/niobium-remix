@@ -1,4 +1,4 @@
-import type { ActionFunction } from "remix";
+import type { ActionFunction } from "@remix-run/node";
 
 import { Page } from "~/components/dashboard/page";
 import { useUser } from "~/utils/utils";
@@ -6,7 +6,7 @@ import {
   updatePasswordOnlyForm,
   updateProfileOnlyForm,
 } from "~/utils/users.server";
-import { PasswordForm, ProfileForm } from "~/components/dashboard/user-froms";
+import { PasswordForm, ProfileForm } from "~/components/dashboard/user-forms";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();

@@ -1,8 +1,8 @@
-import { Form, Link } from "remix";
+import { Form, Link } from "@remix-run/react";
 
 import { getFullNameOrNull, useOptionalUser } from "~/utils/utils";
 import background from "~/images/index-bg.png";
-import { Image } from "~/components/image";
+import { Image } from "~/modules/image";
 
 export default function Index() {
   const user = useOptionalUser();

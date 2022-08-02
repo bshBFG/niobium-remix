@@ -1,6 +1,6 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
 
-import { Image } from "~/components/image";
+import { Image } from "~/modules/image";
 import defaultAvatar from "~/components/dashboard/images/default-avatar.jpg";
 
 type InputProps = React.ComponentProps<"input"> & {

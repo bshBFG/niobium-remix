@@ -2,20 +2,19 @@ import crypto from "crypto";
 import fs from "fs";
 import fsp from "fs/promises";
 import path from "path";
+import axios from "axios";
 import type { Readable } from "stream";
-import { PassThrough } from "stream";
-import { fetch as nodeFetch, Request as NodeRequest } from "@remix-run/node";
 import type { FitEnum } from "sharp";
 import sharp from "sharp";
 
 const ASSETS_FOLDER = "public";
 const CACHE_FOLDER = ".cache/images";
 
-const badImageBase64 =
+const BAD_IMAGE_BASE64 =
   "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
 export function badImageResponse() {
-  let buffer = Buffer.from(badImageBase64, "base64");
+  let buffer = Buffer.from(BAD_IMAGE_BASE64, "base64");
   return new Response(buffer, {
     status: 500,
     headers: {
@@ -99,15 +98,11 @@ export async function createImageReadStreamFromSrc(src: string) {
 }
 
 export async function createImageReadStreamFromUrl(src: string) {
-  const imgRequest = new NodeRequest(src.toString());
-  const imageResponse = await nodeFetch(imgRequest);
+  const response = await axios.get(src, { responseType: "stream" });
 
-  const passThroughImage = new PassThrough();
+  const status = response.status;
 
-  const imageBody = imageResponse.body;
-  const status = imageResponse.status;
-
-  const imageReadStream: Readable = imageBody.pipe(passThroughImage);
+  const imageReadStream: Readable = response.data;
 
   return {
     imageReadStream,
@@ -200,7 +195,7 @@ function getCachedImagePath(
   return cachedFile;
 }
 
-function checkimageSource(src: string): "src" | "url" {
+function checkImageSource(src: string): "src" | "url" {
   if (src.startsWith("/") && (src.length === 1 || src[1] !== "/")) {
     return "src";
   } else {
@@ -208,14 +203,14 @@ function checkimageSource(src: string): "src" | "url" {
   }
 }
 
-type FormatedImage = {
-  formatedImage: Readable;
+type FormattedImage = {
+  formattedImage: Readable;
   status: number | null;
 };
 
 export async function formatImageWithCache(
   request: Request
-): Promise<FormatedImage> {
+): Promise<FormattedImage> {
   const { url, src, width, height, quality, fit, position } =
     extractImageParams(request);
 
@@ -234,9 +229,9 @@ export async function formatImageWithCache(
   const exists = await checkFileExists(cachedImagePath);
 
   if (exists) {
-    const formatedImage = fs.createReadStream(cachedImagePath);
+    const formattedImage = fs.createReadStream(cachedImagePath);
     return {
-      formatedImage,
+      formattedImage,
       status: null,
     };
   } else {
@@ -244,7 +239,7 @@ export async function formatImageWithCache(
   }
 
   const { imageReadStream, status } =
-    checkimageSource(src) === "src"
+    checkImageSource(src) === "src"
       ? await createImageReadStreamFromSrc(src)
       : await createImageReadStreamFromUrl(src);
 
@@ -277,14 +272,14 @@ export async function formatImageWithCache(
     });
   });
 
-  const formatedImage = fs.createReadStream(cachedImagePath);
+  const formattedImage = fs.createReadStream(cachedImagePath);
 
-  return { formatedImage, status };
+  return { formattedImage, status };
 }
 
 export async function formatImageWithoutCache(
   request: Request
-): Promise<FormatedImage> {
+): Promise<FormattedImage> {
   const { src, width, height, quality, fit, position } =
     extractImageParams(request);
 
@@ -293,7 +288,7 @@ export async function formatImageWithoutCache(
   }
 
   const { imageReadStream, status } =
-    checkimageSource(src) === "src"
+    checkImageSource(src) === "src"
       ? await createImageReadStreamFromSrc(src)
       : await createImageReadStreamFromUrl(src);
 
@@ -307,5 +302,5 @@ export async function formatImageWithoutCache(
 
   imageReadStream.pipe(transformStream);
 
-  return { formatedImage: transformStream, status };
+  return { formattedImage: transformStream, status };
 }

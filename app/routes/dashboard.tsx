@@ -1,5 +1,6 @@
-import type { LoaderFunction } from "remix";
-import { json, Outlet } from "remix";
+import type { LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Outlet } from "@remix-run/react";
 
 import { SidebarProvider } from "~/components/dashboard/sidebar-context";
 import { DashboardLayout } from "~/components/dashboard/layout";

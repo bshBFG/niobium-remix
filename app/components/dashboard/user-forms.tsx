@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
-import { useFetcher } from "remix";
+import { useFetcher } from "@remix-run/react";
 
-import type { User, Profile } from "~/models/user.server";
-import { ActionData } from "~/utils/users.server";
+import type { UserWithProfile } from "~/models/user.server";
+import type { ActionData } from "~/utils/users.server";
 import { ImageInput, Input } from "./input";
 
 type FormsProps = {
-  user: User & { profile: Profile | null };
+  user: UserWithProfile;
 };
 
 export const UserForm = ({ user }: FormsProps) => {

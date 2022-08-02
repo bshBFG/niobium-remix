@@ -5,8 +5,8 @@ import {
   CogIcon,
   UserIcon,
 } from "@heroicons/react/outline";
-import { ComponentProps } from "react";
-import { NavLink, useMatches } from "remix";
+import type { ComponentProps } from "react";
+import { NavLink, useMatches } from "@remix-run/react";
 
 import { Logo } from "./logo";
 

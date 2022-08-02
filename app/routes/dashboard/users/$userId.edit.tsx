@@ -1,7 +1,8 @@
-import type { ActionFunction, LoaderFunction } from "remix";
-import { json, redirect, useLoaderData } from "remix";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 
-import { Profile, User } from "~/models/user.server";
+import type { UserWithProfile } from "~/models/user.server";
 import { getUserWithProfileById } from "~/models/user.server";
 import { Page } from "~/components/dashboard/page";
 import {
@@ -13,10 +14,10 @@ import {
   PasswordForm,
   ProfileForm,
   UserForm,
-} from "~/components/dashboard/user-froms";
+} from "~/components/dashboard/user-forms";
 
 type LoaderData = {
-  user: User & { profile: Profile | null };
+  user: UserWithProfile;
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -53,7 +54,8 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function UserEditPage() {
-  const { user } = useLoaderData<LoaderData>();
+  const data = useLoaderData<LoaderData>();
+  const user = data.user as any as UserWithProfile;
 
   return (
     <Page title="User editing" back>

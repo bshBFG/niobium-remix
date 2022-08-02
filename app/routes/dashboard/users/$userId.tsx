@@ -1,10 +1,11 @@
-import type { LoaderFunction } from "remix";
-import { json, Link, redirect, useLoaderData } from "remix";
+import type { LoaderFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
 
+import type { Profile, User } from "~/models/user.server";
 import { getUserWithProfileById } from "~/models/user.server";
-import { Profile, User } from "~/models/user.server";
 import { getFullNameOrNull, toCapitalize } from "~/utils/utils";
-import { Image } from "~/components/image";
+import { Image } from "~/modules/image";
 import defaultAvatar from "~/components/dashboard/images/default-avatar.jpg";
 import { Page } from "~/components/dashboard/page";
 

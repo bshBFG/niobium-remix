@@ -1,5 +1,6 @@
-import type { ActionFunction, LoaderFunction } from "remix";
-import { Form, json, Link, useLoaderData } from "remix";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 import { PencilAltIcon, TrashIcon } from "@heroicons/react/outline";
 
 import {
@@ -9,7 +10,7 @@ import {
   TableHead,
   TableRow,
 } from "~/components/dashboard/table";
-import { Image } from "~/components/image";
+import { Image } from "~/modules/image";
 import { getFullNameOrNull, toCapitalize } from "~/utils/utils";
 import defaultAvatar from "~/components/dashboard/images/default-avatar.jpg";
 import { deleteUserById, getAllUsersWithProfile } from "~/models/user.server";

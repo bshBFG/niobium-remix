@@ -1,7 +1,11 @@
 import { useEffect, useRef } from "react";
-import type { ActionFunction, LoaderFunction, MetaFunction } from "remix";
-import { json, redirect, useActionData, useSearchParams } from "remix";
-import { Form, Link } from "remix";
+import type {
+  ActionFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 
 import { getUserId, createUserSession } from "~/utils/session.server";
 import { createUser, getUserByEmail } from "~/models/user.server";

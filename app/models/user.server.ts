@@ -6,6 +6,10 @@ import { prisma } from "~/utils/db.server";
 
 export type { User, Profile };
 
+export type UserWithProfile = User & {
+  profile: Profile | null;
+};
+
 export { Role };
 
 export async function getAllUsers() {
@@ -24,7 +28,9 @@ export async function getUserById(id: User["id"]) {
   return await prisma.user.findUnique({ where: { id } });
 }
 
-export async function getUserWithProfileById(id: User["id"]) {
+export async function getUserWithProfileById(
+  id: User["id"]
+): Promise<UserWithProfile | null> {
   return await prisma.user.findUnique({
     where: { id },
     include: {
@@ -34,6 +40,8 @@ export async function getUserWithProfileById(id: User["id"]) {
 }
 
 export async function getUserByEmail(email: User["email"]) {
+  console.log(email);
+
   return await prisma.user.findUnique({ where: { email } });
 }
 
